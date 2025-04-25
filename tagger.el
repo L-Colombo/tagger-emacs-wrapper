@@ -59,11 +59,14 @@
   (let ((pattern (read-from-minibuffer "Query pattern: ")))
     (let ((search-output (shell-command-to-string
                           (concat "tgr search " pattern))))
-      (with-current-buffer-window
-          (get-buffer-create (format "*tgr search: %s*" pattern))
-          nil nil
-        (insert search-output)
-        (switch-to-buffer-other-window (format "*tgr search: %s*" pattern))))))
+
+      (if (= 1 (length search-output))
+          (message (format "No result for query \"%s\"" pattern))
+        (with-current-buffer-window
+            (get-buffer-create (format "*tgr search: %s*" pattern))
+            nil nil
+          (insert search-output)
+          (switch-to-buffer-other-window (format "*tgr search: %s*" pattern)))))))
 
 ;;;###autoload
 (defun tagger/tags-all ()
