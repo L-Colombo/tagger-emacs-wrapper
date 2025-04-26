@@ -51,7 +51,7 @@
           (get-buffer-create link-buf-name)
         (insert header)
         (dolist (file file-list)
-          (insert (format "+ [[%s][%s]]\n"
+          (insert (format "[[%s][%s]]\n"
                           (format "%s/%s" tagger/tagger-directory file) file)))
         (beginning-of-buffer)
         (org-mode)
