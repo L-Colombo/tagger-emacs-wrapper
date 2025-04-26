@@ -38,6 +38,27 @@
   "If provided, offers a completing read of files in your org directory")
 
 ;;;###autoload
+(defun tagger/locate ()
+  "Show files that contain tags matching a given pattern"
+  (interactive)
+  (let ((pattern (read-from-minibuffer "Query pattern: ")))
+    (let ((file-list (string-split (shell-command-to-string
+                                    (format "tgr locate %s" pattern))))
+          (link-buf-name (format "%s.org" pattern))
+          (header
+           (format "* Files containing tags that match the pattern \"%s\"\n" pattern)))
+      (with-current-buffer
+          (get-buffer-create link-buf-name)
+        (insert header)
+        (dolist (file file-list)
+          (insert (format "+ [[%s][%s]]\n"
+                          (format "%s/%s" tagger/tagger-directory file) file)))
+        (beginning-of-buffer)
+        (org-mode)
+        (org-fold-show-all)
+        (switch-to-buffer-other-window link-buf-name)))))
+
+;;;###autoload
 (defun tagger/refile ()
   "Refile all subtrees that match a given pattern"
   (interactive)
