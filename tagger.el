@@ -35,7 +35,7 @@
 
 (defvar tagger/tagger-directory
   nil
-  "If provided, offers a completing read of files in your org directory")
+  "The directory where your Org files to be searched reside")
 
 ;;;###autoload
 (defun tagger/locate ()
