@@ -1,0 +1,25 @@
+* Tagger-Emacs-Wrapper
+
+This is a wrapper that offers allows to call some functions from the [[https://github.com/L-Colombo/tagger][Tagger]] utility from the comfort of Emacs.
+
+** Installation and setup
+
+This package is not (yet) in any of the official repositories.
+
+To install it with ~use-package~, clone the repository and add to your init file something like the following:
+
+#+begin_src emacs-lisp
+(use-package tagger
+  :load-path "path/to/the/repository"
+  :bind (("C-c 1" . #'tagger/search)
+         ("C-c 2" . #'tagger/tags-all)
+         ("C-c 3" . #'tagger/tags-file)
+         ("C-c 4" . #'tagger/refile)
+         ("C-c 5" . #'tagger/locate))
+  :init (setq tagger/tagger-directory
+              "path/to/your/directory")) ;; This must be set to ensure optimal functionality!
+#+end_src
+
+** Contributing
+
+Pull requests are welcome. Feel free to open an issue.
