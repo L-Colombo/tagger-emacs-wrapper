@@ -3,7 +3,7 @@
 ;; Copyright (C) 2025 Lorenzo Colombo
 
 ;; Author: Lorenzo Colomvo
-;; Version: 0.1.0
+;; Version: 0.1.1
 ;; Keywords: Org-Mode, Tagger
 ;; URL: https://github.com/L-Colombo/tagger-emacs-wrapper
 
@@ -41,7 +41,7 @@
 (defun tagger/locate ()
   "Show files that contain tags matching a given pattern"
   (interactive)
-  (let ((pattern (read-from-minibuffer "Query pattern: ")))
+  (let ((pattern (read-from-minibuffer "[tagger/locate] Query pattern: ")))
     (let ((file-list (string-split (shell-command-to-string
                                     (format "tgr locate %s" pattern))))
           (link-buf-name (format "%s.org" pattern))
@@ -62,7 +62,7 @@
 (defun tagger/refile ()
   "Refile all subtrees that match a given pattern"
   (interactive)
-  (let ((pattern (read-from-minibuffer "Query pattern: ")))
+  (let ((pattern (read-from-minibuffer "[tagger/refile] Query pattern: ")))
     (let ((refiled-file-contents (shell-command-to-string
                                   (format "tgr refile %s --no-pager" pattern)))
           (refiled-bufname (format "tgr_refiled_%s.org" pattern)))
@@ -77,7 +77,7 @@
 (defun tagger/search ()
   "Search for tags in your tagger directory"
   (interactive)
-  (let ((pattern (read-from-minibuffer "Query pattern: ")))
+  (let ((pattern (read-from-minibuffer "[tagger/search] Query pattern: ")))
     (let ((search-output (shell-command-to-string
                           (concat "tgr search " pattern))))
 
@@ -105,7 +105,7 @@
   "Get all your tags in a specific file withing your tagger directory"
   (interactive)
   (let ((file (completing-read
-               "Where? "
+               "[tagger/tags-file] Where? "
                (directory-files
                 tagger/tagger-directory))))
     (with-current-buffer-window
