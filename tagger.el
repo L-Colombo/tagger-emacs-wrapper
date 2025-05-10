@@ -3,7 +3,7 @@
 ;; Copyright (C) 2025 Lorenzo Colombo
 
 ;; Author: Lorenzo Colomvo
-;; Version: 0.1.1
+;; Version: 0.1.2
 ;; Keywords: Org-Mode, Tagger
 ;; URL: https://github.com/L-Colombo/tagger-emacs-wrapper
 
@@ -41,12 +41,12 @@
 (defun tagger/locate ()
   "Show files that contain tags matching a given pattern"
   (interactive)
-  (let ((pattern (read-from-minibuffer "[tagger/locate] Query pattern: ")))
-    (let ((file-list (string-split (shell-command-to-string
-                                    (format "tgr locate %s" pattern))))
-          (link-buf-name (format "%s.org" pattern))
-          (header
-           (format "* Files containing tags that match the pattern \"%s\"\n" pattern)))
+  (let* ((pattern (read-from-minibuffer "[tagger/locate] Query pattern: "))
+         (file-list (string-split (shell-command-to-string
+                                   (format "tgr locate %s" pattern))))
+         (link-buf-name (format "%s.org" pattern))
+         (header
+          (format "* Files containing tags that match the pattern \"%s\"\n" pattern)))
       (with-current-buffer
           (get-buffer-create link-buf-name)
         (insert header)
@@ -56,38 +56,37 @@
         (beginning-of-buffer)
         (org-mode)
         (org-fold-show-all)
-        (switch-to-buffer-other-window link-buf-name)))))
+        (switch-to-buffer-other-window link-buf-name))))
 
 ;;;###autoload
 (defun tagger/refile ()
   "Refile all subtrees that match a given pattern"
   (interactive)
-  (let ((pattern (read-from-minibuffer "[tagger/refile] Query pattern: ")))
-    (let ((refiled-file-contents (shell-command-to-string
-                                  (format "tgr refile %s --no-pager" pattern)))
-          (refiled-bufname (format "tgr_refiled_%s.org" pattern)))
-      (with-current-buffer
-          (get-buffer-create refiled-bufname)
-        (insert refiled-file-contents)
-        (beginning-of-buffer)
-        (org-mode)
-        (switch-to-buffer-other-window refiled-bufname)))))
+  (let* ((pattern (read-from-minibuffer "[tagger/refile] Query pattern: "))
+         (refiled-file-contents (shell-command-to-string
+                                 (format "tgr refile %s --no-pager" pattern)))
+         (refiled-bufname (format "tgr_refiled_%s.org" pattern)))
+    (with-current-buffer
+        (get-buffer-create refiled-bufname)
+      (insert refiled-file-contents)
+      (beginning-of-buffer)
+      (org-mode)
+      (switch-to-buffer-other-window refiled-bufname))))
 
 ;;;###autoload
 (defun tagger/search ()
   "Search for tags in your tagger directory"
   (interactive)
-  (let ((pattern (read-from-minibuffer "[tagger/search] Query pattern: ")))
-    (let ((search-output (shell-command-to-string
-                          (concat "tgr search " pattern))))
-
-      (if (= 1 (length search-output))
-          (message (format "No result for query \"%s\"" pattern))
-        (with-current-buffer-window
-            (get-buffer-create (format "*tgr search: %s*" pattern))
-            nil nil
-          (insert search-output)
-          (switch-to-buffer-other-window (format "*tgr search: %s*" pattern)))))))
+  (let* ((pattern (read-from-minibuffer "[tagger/search] Query pattern: "))
+         (search-output (shell-command-to-string
+                         (concat "tgr search " pattern))))
+    (if (= 1 (length search-output))
+        (message (format "No result for query \"%s\"" pattern))
+      (with-current-buffer-window
+          (get-buffer-create (format "*tgr search: %s*" pattern))
+          nil nil
+        (insert search-output)
+        (switch-to-buffer-other-window (format "*tgr search: %s*" pattern))))))
 
 ;;;###autoload
 (defun tagger/tags-all ()
